@@ -72,6 +72,7 @@ public class UDPServerD {
                         
                 if (network.isEmpty())
                 {   
+                    is_announced = true;
                     socket.setSoTimeout(0);
                     try{
                         System.out.println("\n--------Server is listening ----------\n");

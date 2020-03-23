@@ -137,7 +137,7 @@ public class UDPClientD
     {
         int i = 0;
         boolean has_found = false;
-        while(!has_found)
+        while((!has_found) && (i < network.size()))
         {
             try {
                 if(network.get(i).getIP().equals(InetAddress.getLocalHost()))
