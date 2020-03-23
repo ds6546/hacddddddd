@@ -30,6 +30,11 @@ public class Client implements Serializable{
         return port;
     }
     
+    public void updatePort(int newport)
+    {
+        this.port = newport;
+    }
+    
     public boolean getis_received()
     {
         return is_received;

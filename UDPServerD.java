@@ -31,14 +31,16 @@ public class UDPServerD {
         try{
             socket = new DatagramSocket(1234);
             socket.setSoTimeout(300000);
-            byte[] incomingData = new byte[1024];   
+            byte[] incomingData = new byte[1024];  
+            
+            Calendar wait_till = Calendar.getInstance();
             
             while(true)
             {
                 DatagramPacket receivePacket = new DatagramPacket(incomingData, incomingData.length);
                 System.out.println("\n--------Server is listening ----------\n");
                 
-                Calendar wait_till = Calendar.getInstance();
+                
                 
                 if(network.isEmpty())
                 {
@@ -65,9 +67,9 @@ public class UDPServerD {
                         DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, address, port);
                         System.out.println("Sending packet");
                         socket.send(sendPacket);
-                        System.out.println("Packet sent");   
+                        System.out.println("Packet sent");  
+                        setAllFalse();
                         
-                        wait_till = Calendar.getInstance();
                         wait_till.add(Calendar.SECOND, 30);   //Maximum wait time until next message
                     }
                     catch(IOException e)
@@ -81,17 +83,21 @@ public class UDPServerD {
                     while((Calendar.getInstance().compareTo(wait_till) <= 0) && (!is_all_received()))
                     {
                         try{
+                            System.out.println("waiting");
                             socket.receive(receivePacket);
+                            System.out.println("received");
                             
                             String message = new String(receivePacket.getData());
                             InetAddress address = receivePacket.getAddress();
                             int port = receivePacket.getPort();
-                            System.out.println("Received message: " + message);
+                            System.out.println("Received messagezz: " + message);
                             System.out.println("Client IP: "+ address.getHostAddress());
                             System.out.println("Client port: "+ port);
                             
-                            if(!isIPpresent(address))
+                            
+                            if(!isIPpresent(address, port))
                             {
+                                System.out.println("Should not go here");
                                 network.add(new Client(address, port));
                             }
                         }
@@ -107,7 +113,8 @@ public class UDPServerD {
                         os.writeObject(sendPkt);
                         byte[] sendData = outputStream.toByteArray();
                         sendPackets(sendData);
-                        System.out.println("Packets sent");                         
+                        System.out.println("Packets sent");  
+                        setAllFalse();
                     }
                     catch(IOException e){
                         e.printStackTrace();
@@ -127,6 +134,7 @@ public class UDPServerD {
 
     public boolean is_all_received()
     {
+        System.out.println("is all received entered");
         for(int i = 0; i<network.size(); i++)
         {
             if (!network.get(i).getis_received())
@@ -137,12 +145,13 @@ public class UDPServerD {
         return true;
     }
     
-    public boolean isIPpresent(InetAddress address)
+    public boolean isIPpresent(InetAddress address, int port)
     {
         for(int i = 0; i<network.size(); i++)
         {
             if(network.get(i).getIP().equals(address)){
                 network.get(i).setReceivedTrue();
+                network.get(i).updatePort(port);
                 return true;
             }
         }
@@ -155,6 +164,7 @@ public class UDPServerD {
         {
             if(network.get(i).getis_received())
             {
+                System.out.println("packet pathayo");
                 DatagramPacket sendPacket = new DatagramPacket(data, data.length, network.get(i).getIP(), network.get(i).getPort());
                 try{
                 socket.send(sendPacket);
@@ -165,7 +175,14 @@ public class UDPServerD {
                 }
             }
         }
-        
+    }
+    
+    public void setAllFalse()
+    {
+        for(int i = 0; i < network.size(); i++)
+        {
+            network.get(i).setReceivedFalse();
+        }
     }
 
 }
