@@ -1,18 +1,20 @@
 
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.util.Calendar;
 
-public class Client {
+public class Client implements Serializable{
 	private InetAddress IPAddress;
 	boolean is_received;
+        int port;
 	
-    public Client(InetAddress IP, boolean was_received)
+    public Client(InetAddress IP, int port)
 
     {
 
     	this.IPAddress = IP;
-
-        this.is_received = was_received;
+        this.port = port;
+        this.is_received = true;
 
     }
     
@@ -24,6 +26,10 @@ public class Client {
 
     }
     
+    public int getPort(){
+        return port;
+    }
+    
     public boolean getis_received()
     {
         return is_received;
@@ -31,5 +37,15 @@ public class Client {
     
     public void printIP() {
         System.out.println(IPAddress.getHostAddress());
+    }
+    
+    public void setReceivedTrue()
+    {
+        is_received = true;
+    }
+    
+    public void setReceivedFalse()
+    {
+        is_received = false;
     }
 }
