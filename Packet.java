@@ -40,4 +40,16 @@ public class Packet implements Serializable{
             network.get(i).printIP();
         }
     }
+    
+    public void remove_nonresponding_Clients()
+    {
+        for (int i=0; i<network.size(); i++)
+        {
+            if(!network.get(i).is_received)
+            {
+                System.out.println("Client: " + network.get(i) + "is down");
+                network.remove(i);
+            }
+        }
+    }
 }

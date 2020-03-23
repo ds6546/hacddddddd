@@ -26,6 +26,15 @@ public class Client implements Serializable{
 
     }
     
+    public void printIP() {
+        System.out.println(IPAddress.getHostAddress());
+    }
+    
+    @Override
+    public String toString(){
+        return IPAddress.getHostAddress();
+    }
+    
     public int getPort(){
         return port;
     }
@@ -40,9 +49,7 @@ public class Client implements Serializable{
         return is_received;
     }
     
-    public void printIP() {
-        System.out.println(IPAddress.getHostAddress());
-    }
+
     
     public void setReceivedTrue()
     {
