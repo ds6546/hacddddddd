@@ -57,7 +57,7 @@ public class UDPClientD
                 try{
                     socket = new DatagramSocket();
                     InetAddress address = server_address;
-                    String message = "Hello! from the Client";
+                    String message = "Hello! from the Biwansh";
                     byte[] sendMessage = message.getBytes();
                     DatagramPacket sendPacket = new DatagramPacket(sendMessage, sendMessage.length, address, 1234);
                     socket.send(sendPacket);
@@ -72,6 +72,7 @@ public class UDPClientD
                     socket.setSoTimeout(30000);
                     if(receiveUnntilTimeout()==0)
                     {
+                        System.out.println("after the socket function, about to become the server");
                         return;
                     }
                     
