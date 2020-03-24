@@ -15,6 +15,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;  
 import java.util.Date;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,10 +27,10 @@ public class UDPClientD
     DatagramSocket socket;
     DatagramPacket incomingPacket;
         
-    public UDPClientD(InetAddress add, List<Client> passed_net)
+    public UDPClientD(InetAddress add)
     {
         server_address = add;
-        network = passed_net;
+        network = new ArrayList<>();
     }
         
     public void setServerAddress(InetAddress add)
@@ -37,7 +38,7 @@ public class UDPClientD
         server_address = add;
     }
     
-    public void executeClient() 
+    public List<Client> executeClient() 
     {
         Random rand = new Random();
         
@@ -73,7 +74,13 @@ public class UDPClientD
                     if(receiveUnntilTimeout()==0)
                     {
                         System.out.println("after the socket function, about to become the server");
-                        return;
+                        System.out.println("printing network before going to HAC:");
+                        for (int i=0; i<network.size(); i++)
+        {
+            network.get(i).printIP();
+        }
+                        return network;
+                                        
                     }
                     
                     hasConnectionEstablished = true;
@@ -94,6 +101,7 @@ public class UDPClientD
                         pkt.remove_nonresponding_Clients();
                         System.out.println("Active clients: -----");
                         pkt.printClientArray();
+                        network = pkt.getClientArray();
                         
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
@@ -127,6 +135,8 @@ public class UDPClientD
            socket.close();
            remove_myself();
            System.out.println("I am the server now");
+           System.out.println("Printing arraylist before remove myself:");
+           
            return 0;
         } catch (IOException ex) {
             Logger.getLogger(UDPServerD.class.getName()).log(Level.SEVERE, null, ex);
@@ -136,6 +146,11 @@ public class UDPClientD
     
     public void remove_myself()
     {
+        System.out.println("aaaaaaaaa");
+         for (int i=0; i<network.size(); i++)
+        {
+            network.get(i).printIP();
+        }
         int i = 0;
         boolean has_found = false;
         while((!has_found) && (i < network.size()))
@@ -150,6 +165,11 @@ public class UDPClientD
                 Logger.getLogger(UDPClientD.class.getName()).log(Level.SEVERE, null, ex);
             }
             i++;
+        }
+        System.out.println("hahaha you see it?");
+         for (int k=0; k<network.size(); k++)
+        {
+            network.get(k).printIP();
         }
     }
     
