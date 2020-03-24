@@ -20,13 +20,18 @@ import java.util.logging.Logger;
 
 public class UDPServerD {
 	
-    private List<Client> network;
+    private final List<Client> network;
     DatagramSocket socket;
     DatagramPacket receivePacket;
     
-    public UDPServerD(List<Client> passed_net)
+    public UDPServerD()
     {
-        network = passed_net;
+        network = new ArrayList<>();
+    }
+    
+    public UDPServerD(List<Client> net)
+    {
+        this.network = net;
     }
 	
     public void executeServer()
@@ -41,16 +46,9 @@ public class UDPServerD {
             
             while(true)
             {
-                System.out.println("printing client array :");
-                        for (int i=0; i<network.size(); i++)
-        {
-            network.get(i).printIP();
-        }
-                        
                 if ((!network.isEmpty()) && (is_announced == false))
                 {
                     String response = "I am your new server!";
-                    System.out.println("I am the new server here.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                     is_announced = true;
                     remove_non_responding_clients();
                     
@@ -61,7 +59,7 @@ public class UDPServerD {
                         os.writeObject(sendPkt);
                         byte[] sendData = outputStream.toByteArray();
                         sendPackets(sendData);
-                        System.out.println("Packets sent after becoming the new server");
+                        System.out.println("Packets sent");
                         
                         wait_till = Calendar.getInstance();
                         wait_till.add(Calendar.SECOND, 30);
@@ -121,9 +119,7 @@ public class UDPServerD {
                 else{
                     while(!is_all_received())
                     {
-                        System.out.println("while (!is all received) entered");
                         long times_out = wait_till.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
-                        System.out.println("times_out in " + times_out);
                         socket.setSoTimeout((int)times_out);
                         if(receiveUnntilTimeout()==0) 
                         {
