@@ -56,9 +56,9 @@ public class UDPClientD
                 Thread.sleep(random_int);
                 
                 try{
-                    socket = new DatagramSocket();
+                socket = new DatagramSocket(); ////
                     InetAddress address = server_address;
-                    String message = "Hello! from the Biwansh";
+                    String message = "Hello from Client";
                     byte[] sendMessage = message.getBytes();
                     DatagramPacket sendPacket = new DatagramPacket(sendMessage, sendMessage.length, address, 1234);
                     socket.send(sendPacket);
@@ -75,10 +75,6 @@ public class UDPClientD
                     {
                         System.out.println("after the socket function, about to become the server");
                         System.out.println("printing network before going to HAC:");
-                        for (int i=0; i<network.size(); i++)
-        {
-            network.get(i).printIP();
-        }
                         return network;
                                         
                     }

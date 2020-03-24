@@ -22,8 +22,7 @@ public class HAC {
         char input = keyboard.next().charAt(0);
         
         if(input == 'C')
-        {
-            List<Client> nettoserver = new ArrayList<>();
+        {   List<Client> nettoserver = new ArrayList<>();
             System.out.println("Hey client, what is the server IP address you want to connect to?");
             Scanner k2 = new Scanner(System.in);
             String server_address = k2.nextLine();
@@ -31,18 +30,12 @@ public class HAC {
             	InetAddress add = InetAddress.getByName(server_address); 
             	UDPClientD c = new UDPClientD(add);
             	nettoserver = c.executeClient();
-                
-                System.out.println("Printing out the arraylist in the HAC");
-               /* for(int i = 0; i< nettoserver.size(); i++)
-                {
-                    nettoserver.get(i).printIP();
-                }*/
             }
             catch(UnknownHostException e)
             {
                 System.out.println("Server not found!");
             }
-            UDPServerD theServer = new UDPServerD(nettoserver);
+            UDPServerD theServer = new UDPServerD();
             theServer.executeServer();
         }
         

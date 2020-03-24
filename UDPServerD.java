@@ -217,6 +217,25 @@ public class UDPServerD {
         }
     }
     
+        public void sendPacketshyper(byte[] data)
+    {
+        for(int i = 0; i < network.size(); i++)
+        {
+            if(network.get(i).getis_received())
+            {
+                System.out.println("packet pathayo");
+                DatagramPacket sendPacket = new DatagramPacket(data, data.length, network.get(i).getIP(), network.get(i).getPort()+1);
+                try{
+                socket.send(sendPacket);
+                }
+                catch(IOException x)
+                {
+                    System.out.println("Can't send packets");
+                }
+            }
+        }
+    }
+    
     public void setAllFalse()
     {
         for(int i = 0; i < network.size(); i++)
